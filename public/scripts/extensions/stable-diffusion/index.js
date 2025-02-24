@@ -249,6 +249,7 @@ const defaultSettings = {
     restore_faces: false,
     enable_hr: false,
     adetailer_face: false,
+    adetailer_eyes: false,
 
     // Horde settings
     horde: false,
@@ -480,6 +481,7 @@ async function loadSettings() {
     $('#sd_restore_faces').prop('checked', extension_settings.sd.restore_faces);
     $('#sd_enable_hr').prop('checked', extension_settings.sd.enable_hr);
     $('#sd_adetailer_face').prop('checked', extension_settings.sd.adetailer_face);
+    $('#sd_adetailer_eyes').prop('checked', extension_settings.sd.adetailer_eyes);
     $('#sd_refine_mode').prop('checked', extension_settings.sd.refine_mode);
     $('#sd_multimodal_captioning').prop('checked', extension_settings.sd.multimodal_captioning);
     $('#sd_auto_url').val(extension_settings.sd.auto_url);
@@ -907,6 +909,11 @@ function onSamplerChange() {
 
 function onADetailerFaceChange() {
     extension_settings.sd.adetailer_face = !!$('#sd_adetailer_face').prop('checked');
+    saveSettingsDebounced();
+}
+
+function onADetailerEyesChange() {
+    extension_settings.sd.adetailer_eyes = !!$('#sd_adetailer_eyes').prop('checked');
     saveSettingsDebounced();
 }
 
@@ -3110,6 +3117,23 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
         });
     }
 
+    // Conditionally add the ADetailer if adetailer_eyes is enabled
+    if (extension_settings.sd.adetailer_eyes) {
+        payload = deepMerge(payload, {
+            alwayson_scripts: {
+                ADetailer: {
+                    args: [
+                        true, // ad_enable
+                        true, // skip_img2img
+                        {
+                            'ad_model': 'mediapipe_face_mesh_eyes_only',
+                        },
+                    ],
+                },
+            },
+        });
+    }
+
     // Make the fetch call with the payload
     const result = await fetch('/api/sd/generate', {
         method: 'POST',
@@ -4457,6 +4481,7 @@ jQuery(async () => {
     $('#sd_restore_faces').on('input', onRestoreFacesInput);
     $('#sd_enable_hr').on('input', onHighResFixInput);
     $('#sd_adetailer_face').on('change', onADetailerFaceChange);
+    $('#sd_adetailer_eyes').on('change', onADetailerEyesChange);
     $('#sd_refine_mode').on('input', onRefineModeInput);
     $('#sd_character_prompt').on('input', onCharacterPromptInput);
     $('#sd_character_negative_prompt').on('input', onCharacterNegativePromptInput);
