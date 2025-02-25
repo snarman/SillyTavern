@@ -3145,7 +3145,7 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
         });
     }
 
-    if (extension_settings.sd.freeU) {
+    if (extension_settings.sd.freeu_integrated) {
     // Conditionally add the FreeU if freeU is enabled
         payload = deepMerge(payload, {
             alwayson_scripts: {
