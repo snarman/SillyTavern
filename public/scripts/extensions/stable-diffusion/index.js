@@ -251,7 +251,7 @@ const defaultSettings = {
     adetailer_face: false,
     adetailer_eyes: false,
     adetailer_hands: false,
-    freeu_integrated: false
+    freeu_integrated: false,
 
     // Horde settings
     horde: false,
