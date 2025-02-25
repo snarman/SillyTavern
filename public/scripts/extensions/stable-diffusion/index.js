@@ -250,6 +250,7 @@ const defaultSettings = {
     enable_hr: false,
     adetailer_face: false,
     adetailer_eyes: false,
+    adetailer_hands: false,
 
     // Horde settings
     horde: false,
@@ -482,6 +483,7 @@ async function loadSettings() {
     $('#sd_enable_hr').prop('checked', extension_settings.sd.enable_hr);
     $('#sd_adetailer_face').prop('checked', extension_settings.sd.adetailer_face);
     $('#sd_adetailer_eyes').prop('checked', extension_settings.sd.adetailer_eyes);
+    $('#sd_adetailer_hands').prop('checked', extension_settings.sd.adetailer_hands);
     $('#sd_refine_mode').prop('checked', extension_settings.sd.refine_mode);
     $('#sd_multimodal_captioning').prop('checked', extension_settings.sd.multimodal_captioning);
     $('#sd_auto_url').val(extension_settings.sd.auto_url);
@@ -914,6 +916,11 @@ function onADetailerFaceChange() {
 
 function onADetailerEyesChange() {
     extension_settings.sd.adetailer_eyes = !!$('#sd_adetailer_eyes').prop('checked');
+    saveSettingsDebounced();
+}
+
+function onADetailerHandsChange() {
+    extension_settings.sd.adetailer_hands = !!$('#sd_adetailer_hands').prop('checked');
     saveSettingsDebounced();
 }
 
@@ -3101,7 +3108,7 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
     };
 
     // Conditionally add the ADetailer if adetailer_face is enabled
-    if (extension_settings.sd.adetailer_face || extension_settings.sd.adetailer_eyes) {
+    if (extension_settings.sd.adetailer_face || extension_settings.sd.adetailer_eyes || extension_settings.sd.adetailer_hands) {
         let adModels = [];
         
         // Add models dynamically based on conditions
@@ -3110,6 +3117,9 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
         }
         if (extension_settings.sd.adetailer_eyes) {
             adModels.push('mediapipe_face_mesh_eyes_only');
+        }
+        if (extension_settings.sd.adetailer_hands) {
+            adModels.push('hand_yolov8n.pt');
         }
         
         // Convert models into required object format
@@ -4477,6 +4487,7 @@ jQuery(async () => {
     $('#sd_enable_hr').on('input', onHighResFixInput);
     $('#sd_adetailer_face').on('change', onADetailerFaceChange);
     $('#sd_adetailer_eyes').on('change', onADetailerEyesChange);
+    $('#sd_adetailer_hands').on('change', onADetailerHandsChange);
     $('#sd_refine_mode').on('input', onRefineModeInput);
     $('#sd_character_prompt').on('input', onCharacterPromptInput);
     $('#sd_character_negative_prompt').on('input', onCharacterNegativePromptInput);
