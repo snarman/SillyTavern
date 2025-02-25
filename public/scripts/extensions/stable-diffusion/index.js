@@ -3109,10 +3109,10 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
                         true, // ad_enable
                         true, // skip_img2img
                         {
-                            extension_settings.sd.adetailer_face ? { 'ad_model': 'face_yolov8n.pt' } : {},
+                            (extension_settings.sd.adetailer_face) ? { 'ad_model': 'face_yolov8n.pt' } : {},
                         },
                         {
-                            extension_settings.sd.adetailer_eyes ? { 'ad_model': 'mediapipe_face_mesh_eyes_only' } : {}, 
+                            (extension_settings.sd.adetailer_eyes) ? { 'ad_model': 'mediapipe_face_mesh_eyes_only' } : {}, 
                         },
                     ],
                 },
