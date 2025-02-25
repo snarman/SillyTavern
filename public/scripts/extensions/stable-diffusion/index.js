@@ -3108,7 +3108,7 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
     };
 
     // Conditionally add the ADetailer if adetailer_face is enabled
-    if (extension_settings.sd.adetailer_face) {
+    if (extension_settings.sd.adetailer_face || extension_settings.sd.adetailer_eyes) {
         payload = deepMerge(payload, {
             alwayson_scripts: {
                 ADetailer: {
@@ -3116,24 +3116,10 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
                         true, // ad_enable
                         true, // skip_img2img
                         {
-                            'ad_model': 'face_yolov8n.pt',
+                            extension_settings.sd.adetailer_face ? { 'ad_model': 'face_yolov8n.pt' } : {},
                         },
-                    ],
-                },
-            },
-        });
-    }
-
-    // Conditionally add the ADetailer if adetailer_eyes is enabled
-    if (extension_settings.sd.adetailer_eyes) {
-        payload = deepMerge(payload, {
-            alwayson_scripts: {
-                ADetailer: {
-                    args: [
-                        true, // ad_enable
-                        true, // skip_img2img
                         {
-                            'ad_model': 'mediapipe_face_mesh_eyes_only',
+                            extension_settings.sd.adetailer_eyes ? { 'ad_model': 'mediapipe_face_mesh_eyes_only' } : {}, 
                         },
                     ],
                 },
