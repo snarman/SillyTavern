@@ -3102,18 +3102,26 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
 
     // Conditionally add the ADetailer if adetailer_face is enabled
     if (extension_settings.sd.adetailer_face || extension_settings.sd.adetailer_eyes) {
+        let adModelConfig = [];
+        
+        // Add models dynamically based on conditions
+        if (extension_settings.sd.adetailer_face) {
+            adModels.push('face_yolov8n.ptt');
+        }
+        if (extension_settings.sd.adetailer_eyes) {
+            adModels.push('mediapipe_face_mesh_eyes_only');
+        }
+        
+        // Convert models into required object format
+        let adModelArgs = adModels.map(model => ({ 'ad_model': model }));
+        
         payload = deepMerge(payload, {
             alwayson_scripts: {
                 ADetailer: {
                     args: [
                         true, // ad_enable
                         true, // skip_img2img
-                        {
-                            (extension_settings.sd.adetailer_face) ? { 'ad_model': 'face_yolov8n.pt' } : {},
-                        },
-                        {
-                            (extension_settings.sd.adetailer_eyes) ? { 'ad_model': 'mediapipe_face_mesh_eyes_only' } : {}, 
-                        },
+                        ...adModelArgs,
                     ],
                 },
             },
