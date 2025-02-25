@@ -3152,7 +3152,7 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
                 "FreeU Integrated (SD 1.x, SD 2.x, SDXL)": {
                     args: [
                         {
-                          true, // enable freeU
+                          Enabled: true, // enable freeU
                           B1: 1.3,
                           B2: 1.4,
                           S1: 0.9,
