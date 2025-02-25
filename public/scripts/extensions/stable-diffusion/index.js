@@ -250,7 +250,6 @@ const defaultSettings = {
     enable_hr: false,
     adetailer_face: false,
     adetailer_eyes: false,
-    controlnet: true,
 
     // Horde settings
     horde: false,
@@ -483,7 +482,6 @@ async function loadSettings() {
     $('#sd_enable_hr').prop('checked', extension_settings.sd.enable_hr);
     $('#sd_adetailer_face').prop('checked', extension_settings.sd.adetailer_face);
     $('#sd_adetailer_eyes').prop('checked', extension_settings.sd.adetailer_eyes);
-    $('#sd_controlnet').prop('checked', extension_settings.sd.controlnet);
     $('#sd_refine_mode').prop('checked', extension_settings.sd.refine_mode);
     $('#sd_multimodal_captioning').prop('checked', extension_settings.sd.multimodal_captioning);
     $('#sd_auto_url').val(extension_settings.sd.auto_url);
@@ -916,11 +914,6 @@ function onADetailerFaceChange() {
 
 function onADetailerEyesChange() {
     extension_settings.sd.adetailer_eyes = !!$('#sd_adetailer_eyes').prop('checked');
-    saveSettingsDebounced();
-}
-
-function onControlNetChange() {
-    extension_settings.sd.controlnet = !!$('#sd_controlnet_enabled').prop('checked');
     saveSettingsDebounced();
 }
 
@@ -3122,22 +3115,6 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
                             extension_settings.sd.adetailer_eyes ? { 'ad_model': 'mediapipe_face_mesh_eyes_only' } : {}, 
                         },
                     ],
-                },
-            },
-        });
-    }
-
-     // Conditionally add the ControlNet if controlnet is enabled
-    if (extension_settings.sd.controlnet) {
-        payload = deepMerge(payload, {
-            alwayson_scripts: {
-                controlnet: {
-                    args: [ 
-                     {
-                       "enabled": true,
-                       "module": "depth",
-                       "model": "diff_control_sd15_depth_fp16 [978ef0a1]"
-                     }
                 },
             },
         });
