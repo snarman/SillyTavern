@@ -251,6 +251,7 @@ const defaultSettings = {
     adetailer_face: false,
     adetailer_eyes: false,
     adetailer_hands: false,
+    freeu_integrated: false
 
     // Horde settings
     horde: false,
@@ -484,6 +485,7 @@ async function loadSettings() {
     $('#sd_adetailer_face').prop('checked', extension_settings.sd.adetailer_face);
     $('#sd_adetailer_eyes').prop('checked', extension_settings.sd.adetailer_eyes);
     $('#sd_adetailer_hands').prop('checked', extension_settings.sd.adetailer_hands);
+    $('#sd_adetailer_freeu_integrated').prop('checked', extension_settings.sd.freeu_integrated);
     $('#sd_refine_mode').prop('checked', extension_settings.sd.refine_mode);
     $('#sd_multimodal_captioning').prop('checked', extension_settings.sd.multimodal_captioning);
     $('#sd_auto_url').val(extension_settings.sd.auto_url);
@@ -921,6 +923,11 @@ function onADetailerEyesChange() {
 
 function onADetailerHandsChange() {
     extension_settings.sd.adetailer_hands = !!$('#sd_adetailer_hands').prop('checked');
+    saveSettingsDebounced();
+}
+
+function onfreeUChange() {
+    extension_settings.sd.freeu_integrated = !!$('#sd_freeu_integrated').prop('checked');
     saveSettingsDebounced();
 }
 
@@ -3137,6 +3144,26 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
             },
         });
     }
+
+    if (extension_settings.sd.freeU) {
+    // Conditionally add the FreeU if freeU is enabled
+        payload = deepMerge(payload, {
+            alwayson_scripts: {
+                "FreeU Integrated (SD 1.x, SD 2.x, SDXL)": {
+                    args: [
+                        {
+                          true, // enable freeU
+                          B1: 1.3,
+                          B2: 1.4,
+                          S1: 0.9,
+                          S2: 0.2,
+                        },
+                    ],
+                },
+            },
+        });
+    }
+        
                 
 
     // Make the fetch call with the payload
@@ -4488,6 +4515,7 @@ jQuery(async () => {
     $('#sd_adetailer_face').on('change', onADetailerFaceChange);
     $('#sd_adetailer_eyes').on('change', onADetailerEyesChange);
     $('#sd_adetailer_hands').on('change', onADetailerHandsChange);
+    $('#sd_adetailer_freeu_integrated').on('change', onfreeUChange);
     $('#sd_refine_mode').on('input', onRefineModeInput);
     $('#sd_character_prompt').on('input', onCharacterPromptInput);
     $('#sd_character_negative_prompt').on('input', onCharacterNegativePromptInput);
