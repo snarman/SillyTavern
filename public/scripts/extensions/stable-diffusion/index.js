@@ -3102,11 +3102,11 @@ async function generateAutoImage(prompt, negativePrompt, signal) {
 
     // Conditionally add the ADetailer if adetailer_face is enabled
     if (extension_settings.sd.adetailer_face || extension_settings.sd.adetailer_eyes) {
-        let adModelConfig = [];
+        let adModels = [];
         
         // Add models dynamically based on conditions
         if (extension_settings.sd.adetailer_face) {
-            adModels.push('face_yolov8n.ptt');
+            adModels.push('face_yolov8n.pt');
         }
         if (extension_settings.sd.adetailer_eyes) {
             adModels.push('mediapipe_face_mesh_eyes_only');
