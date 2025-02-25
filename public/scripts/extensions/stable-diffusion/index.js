@@ -485,7 +485,7 @@ async function loadSettings() {
     $('#sd_adetailer_face').prop('checked', extension_settings.sd.adetailer_face);
     $('#sd_adetailer_eyes').prop('checked', extension_settings.sd.adetailer_eyes);
     $('#sd_adetailer_hands').prop('checked', extension_settings.sd.adetailer_hands);
-    $('#sd_adetailer_freeu_integrated').prop('checked', extension_settings.sd.freeu_integrated);
+    $('#sd_freeu_integrated').prop('checked', extension_settings.sd.freeu_integrated);
     $('#sd_refine_mode').prop('checked', extension_settings.sd.refine_mode);
     $('#sd_multimodal_captioning').prop('checked', extension_settings.sd.multimodal_captioning);
     $('#sd_auto_url').val(extension_settings.sd.auto_url);
@@ -4515,7 +4515,7 @@ jQuery(async () => {
     $('#sd_adetailer_face').on('change', onADetailerFaceChange);
     $('#sd_adetailer_eyes').on('change', onADetailerEyesChange);
     $('#sd_adetailer_hands').on('change', onADetailerHandsChange);
-    $('#sd_adetailer_freeu_integrated').on('change', onfreeUChange);
+    $('#sd_freeu_integrated').on('change', onfreeUChange);
     $('#sd_refine_mode').on('input', onRefineModeInput);
     $('#sd_character_prompt').on('input', onCharacterPromptInput);
     $('#sd_character_negative_prompt').on('input', onCharacterNegativePromptInput);
